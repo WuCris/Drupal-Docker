@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  drupal:
+    image: "drupal:10.1.6-fpm-alpine"
+    environment:
+      # see https://drupal.org/docs/config/#configuration-options
+      #database_client: mysql
+      #database_host: drupal-database
+      #database_user: drupal
+      #database_password: drupalpassword
+      #database_database: drupal
+      # this url value is just an example, and is likely wrong for your environment!
+      url: http://localhost:8080
+      # contrary to the default mentioned in the linked documentation, this image defaults to NODE_ENV=production (so development mode needs to be explicitly specified if desired)
+      NODE_ENV: production
+    volumes:
+      - drupal-files:/sites/default/files
+    depends_on:
+      - drupal-database
+
+
+  drupal-web:
+    image: drupal-web
+    build: nginx
+    environment:
+      NODE_ENV: production
+    ports:
+      - "9090:80"
+    volumes:
+      - drupal-files:/sites/default/files
+
+  drupal-database:
+    image: "mariadb:11.2.2-jammy"
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupalpassword
+    volumes:
+      - drupal-database:/var/lib/mysql
+
+volumes:
+    drupal-database:
+    drupal-files:
