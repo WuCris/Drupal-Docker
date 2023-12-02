@@ -7,6 +7,6 @@ COPY etc/ /etc/nginx/
 COPY docker-entrypoint.d/40-enable-cache.sh /docker-entrypoint.d/
 
 RUN chmod 555 /docker-entrypoint.d/40-enable-cache.sh \
-   && mkdir -p /opt/drupal/
+   && mkdir -p /opt/drupal/web
 
-COPY --from=builder /opt/drupal/ /opt/drupal/
+COPY --from=builder /opt/drupal/web /opt/drupal/web
