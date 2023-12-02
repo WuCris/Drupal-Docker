@@ -1,0 +1,1 @@
+FROM drupal:10.1.6-fpm-alpine

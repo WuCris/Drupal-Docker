@@ -1,8 +1,9 @@
 version: "3"
 
 services:
-  drupal:
-    image: "drupal:10.1.6-fpm-alpine"
+  drupal-php:
+    image: "drupal-php"
+    build: php
     environment:
       # see https://drupal.org/docs/config/#configuration-options
       #database_client: mysql
