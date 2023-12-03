@@ -1,10 +1,11 @@
 FROM drupal:10.1.6-fpm-alpine
 
-COPY entrypoint.sh /entrypoint.sh
+COPY docker-entrypoint.sh /
+COPY docker-entrypoint.d/ /docker-entrypoint.d/
 
-RUN mkdir /docker-entrypoint.d \
-  && chmod 775 -R /entrypoint.sh /docker-entrypoint.d
+RUN chmod 775 -R /docker-entrypoint.sh /docker-entrypoint.d
 
-COPY config_files/ /opt/drupal/web/sites/default/
+WORKDIR /opt/drupal/
 
-WORKDIR /opt/drupal/web
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["php-fpm"]
