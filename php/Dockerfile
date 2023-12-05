@@ -1,5 +1,8 @@
 FROM drupal:10.1.6-fpm-alpine
 
+RUN composer require drush/drush \
+  && apk add mariadb-client
+
 COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 
@@ -10,9 +13,6 @@ COPY config_files/settings.local.php /etc/default/template/
 COPY config_files/settings.php /opt/drupal/web/sites/default/
 
 WORKDIR /opt/drupal/
-
-RUN composer require drush/drush \
-  && apk add mariadb-client
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["php-fpm"]
