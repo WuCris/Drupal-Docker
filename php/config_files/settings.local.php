@@ -14,3 +14,9 @@ $databases['default']['default'] = array (
 );
 
 $settings['hash_salt'] = 'HASHSALT';
+
+$settings['trusted_host_patterns'] = [
+  '^www\.WEBSITEURL\.WEBSITETLD$',
+  '^WEBSITEURL\.WEBSITETLD$',
+  '^localhost$'
+];
