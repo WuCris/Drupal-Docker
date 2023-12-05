@@ -16,7 +16,7 @@ $databases['default']['default'] = array (
 $settings['hash_salt'] = 'HASHSALT';
 
 $settings['trusted_host_patterns'] = [
-  '^www\.WEBSITEURL\.WEBSITETLD$',
-  '^WEBSITEURL\.WEBSITETLD$',
+  '^www\.SITE_URL\.SITE_TLD$',
+  '^SITE_URL\.SITE_TLD$',
   '^localhost$'
 ];

@@ -9,6 +9,7 @@ services:
       DATABASE_USER: drupal
       DATABASE_PASSWORD: drupalpassword
       DATABASE_HOST: drupal-database
+      URL: example.com
     volumes:
       - drupal-files:/opt/drupal/web/sites/default/files
     depends_on:
