@@ -5,15 +5,16 @@ services:
     image: "drupal-php"
     build: php
     environment:
-      DATABASE: drupal
-      DATABASE_USER: drupal
-      DATABASE_PASSWORD: drupalpassword
-      DATABASE_HOST: drupal-database
-      URL: example.com
+      - MARIADB_DATABASE
+      - MARIADB_USER
+      - MARIADB_PASSWORD
+      - DATABASE_MASTER=drupal-mariadb-master
+      - DATABASE_SLAVE=drupal-mariadb-slave
+      - URL=example.com
     volumes:
       - drupal-files:/opt/drupal/web/sites/default/files
     depends_on:
-      - drupal-database
+      - drupal-mariadb-master
 
 
   drupal-web:
@@ -28,16 +29,47 @@ services:
     depends_on:
       - drupal-php
 
-  drupal-database:
-    image: "mariadb:11.2.2-jammy"
+  drupal-mariadb-master:
+    image: mariadb:11.2
+    command: --server_id=1 --log-bin --log-basename=master1 --binlog-format=mixed
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: yes
-      MYSQL_DATABASE: drupal
-      MYSQL_USER: drupal
-      MYSQL_PASSWORD: drupalpassword
+      MARIADB_RANDOM_ROOT_PASSWORD: yes
+      #MARIADB_ROOT_PASSWORD:
+      MARIADB_USER:
+      MARIADB_PASSWORD:
+      MARIADB_DATABASE:
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD:
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     volumes:
-      - drupal-database:/var/lib/mysql
+      - drupal-mariadb-master:/var/lib/mysql
+
+  drupal-mariadb-slave:
+    image: mariadb:latest
+    command: --server-id=2 --log-basename=master1 --binlog-format=mixed --read-only
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: yes
+      #MARIADB_ROOT_PASSWORD:
+      MARIADB_MASTER_HOST: drupal-mariadb-master
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD:
+      MARIADB_HEALTHCHECK_GRANTS: REPLICA MONITOR
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--replication_io", "--replication_sql", "--replication_seconds_behind_master=1", "--replication"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      drupal-mariadb-master:
+        condition: service_healthy
+    volumes:
+      - drupal-mariadb-slave:/var/lib/mysql
 
 volumes:
-    drupal-database:
+    drupal-mariadb-master:
+    drupal-mariadb-slave:
     drupal-files:
