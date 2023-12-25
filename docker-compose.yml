@@ -2,7 +2,8 @@ version: "3"
 
 services:
   drupal-php:
-    image: "drupal-php"
+    image: drupal-php
+    hostname: drupal-php
     build: php
     environment:
       - MARIADB_DATABASE
@@ -16,9 +17,9 @@ services:
     depends_on:
       - drupal-mariadb-master
 
-
   drupal-web:
     image: drupal-web
+    hostname: drupal-web
     build: nginx
     environment:
       NODE_ENV: production
@@ -31,9 +32,10 @@ services:
 
   drupal-mariadb-master:
     image: mariadb:11.2
+    hostname: mariadb-master
     command: --server_id=1 --log-bin --log-basename=master1 --binlog-format=mixed
     environment:
-      MARIADB_RANDOM_ROOT_PASSWORD: yes
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
       #MARIADB_ROOT_PASSWORD:
       MARIADB_USER:
       MARIADB_PASSWORD:
@@ -49,10 +51,11 @@ services:
       - drupal-mariadb-master:/var/lib/mysql
 
   drupal-mariadb-slave:
-    image: mariadb:latest
+    image: mariadb:11.2
+    hostname: mariadb-slave
     command: --server-id=2 --log-basename=master1 --binlog-format=mixed --read-only
     environment:
-      MARIADB_RANDOM_ROOT_PASSWORD: yes
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
       #MARIADB_ROOT_PASSWORD:
       MARIADB_MASTER_HOST: drupal-mariadb-master
       MARIADB_REPLICATION_USER: replication_user
