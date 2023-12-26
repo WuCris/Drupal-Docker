@@ -1,0 +1,122 @@
+version: "3"
+
+services:
+  drupal-php:
+    image: "harbor.lan:443/drupal/10-php:10.1.6-alpine"
+    hostname: drupal-php
+    build: php
+    environment:
+      - MARIADB_DATABASE
+      - MARIADB_USER
+      - MARIADB_PASSWORD
+      - DATABASE_MASTER=drupal-mariadb-master
+      - DATABASE_SLAVE=drupal-mariadb-slave
+      - URL=example.com
+    deploy:
+      replicas: 5
+      placement:
+        max_replicas_per_node: 3
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: any
+      endpoint_mode: dnsrr
+    volumes:
+      - /mnt/gluster/drupal/drupal-files:/opt/drupal/web/sites/default/files
+    depends_on:
+      - drupal-mariadb-master
+
+  drupal-web:
+    image: "harbor.lan:443/drupal/10-web:10.1.6-alpine"
+    hostname: drupal-web
+    build: nginx
+    environment:
+      NODE_ENV: production
+    networks:
+      - default
+      - nginx-lb
+    deploy:
+      replicas: 3
+      endpoint_mode: dnsrr
+      placement:
+        max_replicas_per_node: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: any
+    volumes:
+      - /mnt/gluster/drupal/drupal-files:/opt/drupal/web/sites/default/files
+    depends_on:
+      - drupal-php
+
+  drupal-mariadb-master:
+    image: mariadb:11.2
+    hostname: mariadb-master
+    command: --server_id=1 --log-bin --log-basename=master1 --binlog-format=mixed
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
+      #MARIADB_ROOT_PASSWORD:
+      MARIADB_USER:
+      MARIADB_PASSWORD:
+      MARIADB_DATABASE:
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD:
+    deploy:
+      # Max 1. We cannot replicate the master node
+      replicas: 1
+      endpoint_mode: dnsrr
+      restart_policy:
+        condition: any
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - /mnt/gluster/drupal/drupal-mariadb-master:/var/lib/mysql
+
+  drupal-mariadb-slave:
+    image: mariadb:11.2
+    hostname: mariadb-slave
+    command: --server-id=2 --log-basename=master1 --binlog-format=mixed --read-only
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
+      #MARIADB_ROOT_PASSWORD:
+      MARIADB_MASTER_HOST: drupal-mariadb-master
+      MARIADB_REPLICATION_USER: replication_user
+      MARIADB_REPLICATION_PASSWORD:
+      MARIADB_HEALTHCHECK_GRANTS: REPLICA MONITOR
+    deploy:
+      replicas: 1
+      endpoint_mode: dnsrr
+      placement:
+        # Max one replica per node is required. This allows each replica to have it's own unique local storage.
+        max_replicas_per_node: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: any
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--replication_io", "--replication_sql", "--replication_seconds_behind_master=1", "--replication"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - drupal-mariadb-master
+    volumes:
+      - /mnt/gluster/drupal/drupal-mariadb-slave:/var/lib/mysql
+
+
+volumes:
+    drupal-mariadb-master:
+    drupal-mariadb-slave:
+    drupal-files:
+
+networks:
+  default:
+  nginx-lb:
+    name: nginx-lb
+    external: true
