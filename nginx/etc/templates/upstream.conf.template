@@ -1,0 +1,7 @@
+
+resolver ${NGINX_LOCAL_RESOLVERS} valid=10s;
+
+upstream drupal-backend {
+    least_conn;
+    server drupal-php:9000;
+}

@@ -11,4 +11,6 @@ RUN chmod 555 /docker-entrypoint.d/40-enable-cache.sh \
 
 COPY --from=builder /opt/drupal/web /opt/drupal/web
 
+ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS 1
+
 WORKDIR /opt/drupal/web
