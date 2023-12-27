@@ -2,7 +2,7 @@ version: "3"
 
 services:
   drupal-php:
-    image: "harbor.lan:443/drupal/10-php:10.1.6-alpine"
+    image: "harbor.lan:8443/drupal/10-php:10.1.6-alpine"
     hostname: drupal-php
     build: php
     environment:
@@ -28,7 +28,7 @@ services:
       - drupal-mariadb-master
 
   drupal-web:
-    image: "harbor.lan:443/drupal/10-web:10.1.6-alpine"
+    image: "harbor.lan:8443/drupal/10-web:10.1.6-alpine"
     hostname: drupal-web
     build: nginx
     environment:
