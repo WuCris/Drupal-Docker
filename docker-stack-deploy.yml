@@ -13,9 +13,9 @@ services:
       - DATABASE_SLAVE=drupal-mariadb-slave
       - URL=example.com
     deploy:
-      replicas: 5
+      replicas: 3
       placement:
-        max_replicas_per_node: 3
+        max_replicas_per_node: 2
       update_config:
         parallelism: 2
         delay: 10s
@@ -37,7 +37,7 @@ services:
       - default
       - nginx-lb
     deploy:
-      replicas: 3
+      replicas: 2
       endpoint_mode: dnsrr
       placement:
         max_replicas_per_node: 1
