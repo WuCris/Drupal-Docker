@@ -12,6 +12,11 @@ RUN chmod 775 -R /docker-entrypoint.sh /docker-entrypoint.d \
 COPY config_files/settings.local.php /etc/default/template/
 COPY config_files/settings.php /opt/drupal/web/sites/default/
 
+RUN { \
+		echo 'upload_max_filesize = 50M'; \
+		echo 'post_max_size = 50M'; \
+	} > /usr/local/etc/php/conf.d/upload-file-size.ini
+
 WORKDIR /opt/drupal/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
