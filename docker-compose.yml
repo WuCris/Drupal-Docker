@@ -2,7 +2,7 @@ version: "3"
 
 services:
   drupal-php:
-    image: drupal-php
+    image: drupal-php:10.1.6-alpine
     hostname: drupal-php
     build: php
     environment:
@@ -18,7 +18,7 @@ services:
       - drupal-mariadb-master
 
   drupal-web:
-    image: drupal-web
+    image: drupal-web:10.1.6-alpine
     hostname: drupal-web
     build: nginx
     environment:
