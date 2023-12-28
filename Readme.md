@@ -30,8 +30,8 @@ Edit the `.env` file as needed and enter randomly generated passcodes for the da
 **We must then build the images and push them to our registry:**
 
 ```
-docker-compose build -f docker-stack-deploy.yml --pull
-docker-compose push -f docker-stack-deploy.yml 
+docker-compose -f docker-stack-deploy.yml build --pull
+docker-compose -f docker-stack-deploy.yml push
 ```
 
 **On a Docker Swarm Manager node run the following to deploy the site:**
@@ -61,8 +61,12 @@ Once you have found a worker (or manager) node with the service running ssh into
 **Example:**
 
 ```
-docker ps  | grep drupal_drupal-php
+docker ps  | grep drupal-php
+```
 
+After finding the container name copy it and exec into it like below.
+
+```
 docker exec -ti drupal_drupal-php.3.7hpi34m8qjfh3skioqgq4n03w drush si
 docker exec -ti drupal_drupal-php.3.7hpi34m8qjfh3skioqgq4n03w drush cr
 ```
