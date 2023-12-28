@@ -12,6 +12,13 @@ RUN chmod 775 -R /docker-entrypoint.sh /docker-entrypoint.d \
 COPY config_files/settings.local.php /etc/default/template/
 COPY config_files/settings.php /opt/drupal/web/sites/default/
 
+
+RUN apk add --update --no-cache --virtual .build-dependencies $PHPIZE_DEPS \
+        && pecl install apcu \
+        && docker-php-ext-enable apcu \
+        && pecl clear-cache \
+        && apk del .build-dependencies
+
 RUN { \
 		echo 'upload_max_filesize = 50M'; \
 		echo 'post_max_size = 50M'; \
