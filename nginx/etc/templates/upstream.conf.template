@@ -2,6 +2,6 @@
 resolver ${NGINX_LOCAL_RESOLVERS} valid=30s;
 
 upstream drupal-backend {
-    least_conn;
+    hash $http_cookie;
     server drupal-php:9000;
 }
