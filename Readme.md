@@ -37,8 +37,7 @@ docker-compose -f docker-stack-deploy.yml push
 **On a Docker Swarm Manager node run the following to deploy the site:**
 
 ```
-set -a; . ./.env; set +a
-docker stack deploy -c docker-stack-deploy.yml drupal --with-registry-auth
+docker stack deploy -c docker-stack-deploy.yml drupal --with-registry-auth < .env
 ```
 
 ### Install Drupal
