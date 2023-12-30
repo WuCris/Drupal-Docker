@@ -1,7 +1,6 @@
 FROM drupal:10.1.6-fpm-alpine
 
-RUN composer require drush/drush \
-  && apk add mariadb-client shadow
+RUN apk add mariadb-client shadow
 
 COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
@@ -28,7 +27,14 @@ RUN { \
 RUN usermod -u 1001 www-data \
    && groupmod -g 1001 www-data
 
+RUN chown -R www-data:www-data /opt/drupal \
+  && chmod 550 /opt/drupal \
+  && chmod ug+X /opt/drupal
+
 WORKDIR /opt/drupal/
+USER www-data
+RUN composer require drush/drush
+USER root
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["php-fpm"]
