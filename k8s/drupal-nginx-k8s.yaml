@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal-nginx
+  labels:
+    app: drupal-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: drupal-nginx
+  template:
+    metadata:
+      labels:
+        app: drupal-nginx
+    spec:
+      hostname: drupal-nginx
+      containers:
+      - name: drupal-nginx
+        image: harbor.lan:8443/drupal/10-web:10.1.6-alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+

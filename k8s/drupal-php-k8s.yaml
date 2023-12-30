@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal-php
+  labels:
+    app: drupal-php
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9000
+    name: drupal-php
+  selector:
+    app: drupal-php
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal-php
+  labels:
+    app: drupal-php
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: drupal-php
+  template:
+    metadata:
+      labels:
+        app: drupal-php
+    spec:
+      hostname: drupal-php
+      containers:
+      - name: drupal-php
+        image: harbor.lan:8443/drupal/10-php:10.1.6-alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: URL
+          value: http://drupal.k8s
+        - name: MARIADB_DATABASE
+          value: drupal       
+        - name: MARIADB_USER
+          value: drupal
+        - name: MARIADB_PASSWORD
+          value: tHtEBLSDZNtDBVu0AFUc8
+        - name: DATABASE_MASTER
+          value: drupal-mariadb
+        - name: DATABASE_SLAVE
+          value: drupal-mariadb
+      imagePullSecrets:
+      - name: regcred
