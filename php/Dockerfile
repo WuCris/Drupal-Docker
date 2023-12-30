@@ -2,6 +2,12 @@ FROM drupal:10.1.6-fpm-alpine
 
 RUN apk add mariadb-client shadow
 
+RUN apk add --update --no-cache --virtual .build-dependencies $PHPIZE_DEPS \
+        && pecl install apcu \
+        && docker-php-ext-enable apcu \
+        && pecl clear-cache \
+        && apk del .build-dependencies
+
 COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 
@@ -10,13 +16,6 @@ RUN chmod 775 -R /docker-entrypoint.sh /docker-entrypoint.d \
 
 COPY config_files/settings.local.php /etc/default/template/
 COPY config_files/settings.php /opt/drupal/web/sites/default/
-
-
-RUN apk add --update --no-cache --virtual .build-dependencies $PHPIZE_DEPS \
-        && pecl install apcu \
-        && docker-php-ext-enable apcu \
-        && pecl clear-cache \
-        && apk del .build-dependencies
 
 RUN { \
 		echo 'upload_max_filesize = 50M'; \
