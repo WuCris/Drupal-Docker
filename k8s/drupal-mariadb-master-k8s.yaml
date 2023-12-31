@@ -5,7 +5,7 @@ metadata:
   labels:
     app: drupal-mariadb-master
 spec:
-  type: ClusterIP
+  clusterIP: None
   ports:
   - port: 3306
     name: drupal-mariadb-master
