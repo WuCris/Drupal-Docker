@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal-mariadb-master
+  labels:
+    app: drupal-mariadb-master
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3306
+    name: drupal-mariadb-master
+  selector:
+    app: drupal-mariadb-master
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: drupal-mariadb-master
+  labels:
+    app: drupal-mariadb-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drupal-mariadb-master
+  template:
+    metadata:
+      labels:
+        app: drupal-mariadb-master
+    spec:
+      hostname: drupal-mariadb-master
+      containers:
+      - name: drupal-mariadb-master
+        image: mariadb:11.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MARIADB_RANDOM_ROOT_PASSWORD
+          value: random
+        - name: MARIADB_USER
+          value: drupal
+        - name: MARIADB_PASSWORD
+          value: tHtEBLSDZNtDBVu0AFUc8
+        - name: MARIADB_DATABASE
+          value: drupal
+        - name: MARIADB_REPLICATION_USER
+          value: replication_user
+        - name: MARIADB_REPLICATION_PASSWORD
+          value: 96Qm9EJ8Ga0eTmSnzQg4NMBn

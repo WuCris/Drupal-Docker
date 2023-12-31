@@ -38,15 +38,17 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: URL
-          value: drupal.k8s
-        - name: DATABASE_MASTER
-          value: drupal-mariadb
         - name: MARIADB_DATABASE
           value: drupal
         - name: MARIADB_USER
           value: drupal
         - name: MARIADB_PASSWORD
           value: tHtEBLSDZNtDBVu0AFUc8
+        - name: DATABASE_MASTER
+          value: drupal-mariadb-master
+        - name: DATABASE_SLAVE
+          value: drupal-mariadb-slave
+        - name: URL
+          value: drupal.k8s
       imagePullSecrets:
       - name: regcred
