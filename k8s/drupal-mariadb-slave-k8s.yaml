@@ -46,5 +46,5 @@ spec:
           value: replication_user
         - name: MARIADB_REPLICATION_PASSWORD
           value: 96Qm9EJ8Ga0eTmSnzQg4NMBn
-        - name: MARIADB_REPLICATION_PASSWORD
+        - name: MARIADB_HEALTHCHECK_GRANTS
           value: REPLICA MONITOR
