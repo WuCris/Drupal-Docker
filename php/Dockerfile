@@ -1,6 +1,6 @@
 FROM drupal:10.1.6-fpm-alpine
 
-RUN apk add mariadb-client shadow
+RUN apk add mariadb-client shadow pwgen
 
 RUN apk add --update --no-cache --virtual .build-dependencies $PHPIZE_DEPS \
         && pecl install apcu \
@@ -12,7 +12,8 @@ COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 
 RUN chmod 775 -R /docker-entrypoint.sh /docker-entrypoint.d \
-  && mkdir -p /etc/default/template
+  && mkdir -p /etc/default/template \
+  && mkdir /opt/drupal/web/sites/default/files
 
 COPY config_files/settings.local.php /etc/default/template/
 COPY config_files/settings.php /opt/drupal/web/sites/default/
