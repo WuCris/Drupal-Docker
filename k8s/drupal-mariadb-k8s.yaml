@@ -33,7 +33,7 @@ spec:
       hostname: drupal-mariadb
       containers:
       - name: drupal-mariadb
-        image: nginx:latest
+        image: mariadb:11.2
         imagePullPolicy: Always
         ports:
         - containerPort: 3306
