@@ -38,15 +38,25 @@ spec:
         ports:
         - containerPort: 3306
         env:
-        - name: MARIADB_RANDOM_ROOT_PASSWORD
-          value: random
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drupal-mariadb-passwords
+              key: MARIADB_ROOT_PASSWORD
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drupal-mariadb-passwords
+              key: MARIADB_PASSWORD
+        - name: MARIADB_REPLICATION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drupal-mariadb-passwords
+              key: MARIADB_REPLICATION_PASSWORD
         - name: MARIADB_USER
           value: drupal
-        - name: MARIADB_PASSWORD
-          value: tHtEBLSDZNtDBVu0AFUc8
         - name: MARIADB_DATABASE
           value: drupal
         - name: MARIADB_REPLICATION_USER
           value: replication_user
-        - name: MARIADB_REPLICATION_PASSWORD
-          value: 96Qm9EJ8Ga0eTmSnzQg4NMBn
+        args: ["--server_id=1", "--log-bin", "--log-basename=master1", "--binlog-format=mixed"]

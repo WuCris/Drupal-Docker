@@ -69,3 +69,13 @@ After finding the container name copy it and exec into it like below.
 docker exec -ti drupal_drupal-php.3.7hpi34m8qjfh3skioqgq4n03w drush si
 docker exec -ti drupal_drupal-php.3.7hpi34m8qjfh3skioqgq4n03w drush cr
 ```
+
+## Kubernetes
+
+```
+ microk8s kubectl create secret generic drupal-mariadb-password \
+      --from-literal=MARIADB_ROOT_PASSWORD=RxKP0JKRyTq3H6vWpMPLpCB2A \
+      --from-literal=MARIADB_PASSWORD=aE43YpngajSgwqPUydaZie2Vy \
+      --from-literal=MARIADB_REPLICATION_PASSWORD=525FIVGrlTJLJZdhaEwX24KVJ \
+      --from-literal=MARIADB_ROOT_REPLICA_PASSWORD=i1NIno3OV4c21XGFtBa072QlC
+```
