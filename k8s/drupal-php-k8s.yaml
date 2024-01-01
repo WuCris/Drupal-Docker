@@ -43,7 +43,10 @@ spec:
         - name: MARIADB_USER
           value: drupal
         - name: MARIADB_PASSWORD
-          value: tHtEBLSDZNtDBVu0AFUc8
+          valueFrom:
+            secretKeyRef:
+              name: drupal-mariadb-passwords
+              key: MARIADB_PASSWORD          
         - name: DATABASE_MASTER
           value: drupal-mariadb-master
         - name: DATABASE_SLAVE
