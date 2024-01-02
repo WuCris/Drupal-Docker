@@ -19,7 +19,8 @@ kind: PersistentVolume
 metadata:
   name: drupal-mariadb-master
   labels:
-    type: local
+    type: glusterfs
+    app: drupal-mariadb-master
 spec:
   storageClassName: gluster-hostpath
   capacity:
@@ -35,6 +36,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: drupal-mariadb-master
+  labels:
+    app: drupal-mariadb-master
 spec:
   storageClassName: gluster-hostpath
   accessModes:
