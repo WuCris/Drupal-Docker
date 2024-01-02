@@ -21,6 +21,8 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        env:
+        - name: NODE_ENV
+          value: production
       imagePullSecrets:
       - name: regcred
-
