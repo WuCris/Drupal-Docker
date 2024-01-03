@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal-mariadb-master
+  labels:
+    app: drupal-mariadb-master
+spec:
+  clusterIP: None
+  ports:
+  - port: 3306
+    name: drupal-mariadb-master
+  selector:
+    app: drupal-mariadb-master
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal-mariadb-master
+  labels:
+    app: drupal-mariadb-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drupal-mariadb-master
+  template:
+    metadata:
+      labels:
+        app: drupal-mariadb-master
+    spec:
+      hostname: drupal-mariadb-master
+      containers:
+      - name: drupal-mariadb-master
+        image: mariadb:11.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drupal-mariadb-passwords
+              key: MARIADB_ROOT_PASSWORD
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drupal-mariadb-passwords
+              key: MARIADB_PASSWORD
+        - name: MARIADB_REPLICATION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: drupal-mariadb-passwords
+              key: MARIADB_REPLICATION_PASSWORD
+        - name: MARIADB_USER
+          value: drupal
+        - name: MARIADB_DATABASE
+          value: drupal
+        - name: MARIADB_REPLICATION_USER
+          value: replication_user
+        args: ["--server_id=1", "--log-bin", "--log-basename=master1", "--binlog-format=mixed"]

@@ -2,6 +2,7 @@
 
 set -e 
 
-# Fixes error where initial drush install malfunctions 
-# due to site files needing to be mounted
-composer -d /opt/drupal require drush/drush
+# Run any drush commands on startup that you may want to run.
+# Example:
+
+# drush cr

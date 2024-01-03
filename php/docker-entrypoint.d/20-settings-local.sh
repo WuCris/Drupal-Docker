@@ -2,7 +2,7 @@
 set -e
 
 SETTINGS_DIR=/opt/drupal/web/sites/default/
-HASHSALT=$(drush eval "print_r(Drupal\Component\Utility\Crypt::randomBytesBase64(55))")
+HASHSALT=$(pwgen -s 70)
 
 SITE_URL=$(echo $URL | awk -F '.' '{print $(NF-1)}')
 SITE_TLD=$(echo $URL | awk -F '.' '{print $(NF-0)}')
