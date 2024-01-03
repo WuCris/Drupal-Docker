@@ -15,12 +15,19 @@ spec:
         app: drupal-nginx
     spec:
       hostname: drupal-nginx
+      volumes:
+      - name: drupal-files
+        persistentVolumeClaim:
+          claimName: drupal-files
       containers:
       - name: drupal-nginx
         image: harbor.lan:8443/drupal/10-web:10.1.6-alpine
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: drupal-files
+          mountPath: /opt/drupal/web/sites/default/files
         env:
         - name: NODE_ENV
           value: production
