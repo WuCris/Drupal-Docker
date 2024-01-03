@@ -1,4 +1,5 @@
-# Drupal Docker Compose (Swarm nad Kubernetes Ready)
+# Drupal Docker Compose 
+## (Swarm and Kubernetes Ready)
 
 This repo is based off the Docker official Drupal image and is designed with modern Docker centric philosophy where code is distributed for deployment as a Docker image. 
 
