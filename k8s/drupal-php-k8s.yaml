@@ -71,7 +71,7 @@ spec:
           claimName: drupal-files
       containers:
       - name: drupal-php
-        image: harbor.lan:8443/drupal/10-php:10.1.6-alpine
+        image: harbor.lan:8443/drupal/10-php:10.2.1-php8.3-fpm-alpine3.19
         imagePullPolicy: Always
         ports:
         - containerPort: 80
