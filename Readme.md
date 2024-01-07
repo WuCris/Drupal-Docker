@@ -9,8 +9,12 @@ Upstream code from Drupal is sourced from upstream images. You may introduce you
 
 Edit the `.env` file as needed and enter randomly generated passcodes for the databases. For example you may use `pwgen -s 20` to generate a password.
 
+We must build the `drupal-php` first as it's a prerequisite for the `drupal-nginx` image.
+
 ```
-docker-compose build --pull
+docker-compose build --pull drupal-php
+docker pull nginx:1.25-alpine
+docker-compose build
 docker-compose up -d
 ```
 ### Install Drupal
