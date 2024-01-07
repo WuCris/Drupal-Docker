@@ -34,7 +34,10 @@ RUN chown -R www-data:www-data /opt/drupal \
 WORKDIR /opt/drupal/
 USER www-data
 RUN composer require drush/drush
-USER root
 
+# Install plugins and themes example
+#RUN composer require 'drupal/zuvi:^10.2'
+
+USER root
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["php-fpm"]
