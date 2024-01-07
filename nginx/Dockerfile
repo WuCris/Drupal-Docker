@@ -1,4 +1,4 @@
-FROM drupal:10.1.6-fpm-alpine as builder
+FROM drupal-php:10.1.6-alpine as builder
 
 
 FROM nginx:1.25-alpine
