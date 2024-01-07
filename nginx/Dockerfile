@@ -1,5 +1,7 @@
 ARG DRUPAL_VERSION
-FROM drupal-php:${DRUPAL_VERSION}-php8.3-fpm-alpine3.19 as builder
+ARG DRUPAL_PHP_IMAGE
+
+FROM ${DRUPAL_PHP_IMAGE}:${DRUPAL_VERSION}-php8.3-fpm-alpine3.19 as builder
 
 FROM nginx:1.25-alpine
 

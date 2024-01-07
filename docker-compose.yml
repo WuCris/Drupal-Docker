@@ -27,6 +27,7 @@ services:
       context: nginx
       args:
         DRUPAL_VERSION: ${DRUPAL_VERSION}
+        DRUPAL_PHP_IMAGE: drupal-php
     environment:
       NODE_ENV: production
     ports:

@@ -37,6 +37,7 @@ services:
       context: nginx
       args:
         DRUPAL_VERSION: ${DRUPAL_VERSION}
+        DRUPAL_PHP_IMAGE: harbor.lan:8443/drupal/10-php
     environment:
       NODE_ENV: production
     networks:
