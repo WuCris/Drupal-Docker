@@ -21,7 +21,7 @@ services:
       - drupal-mariadb-master
 
   drupal-web:
-    image: drupal-web:${DRUPAL_VERSION}-alpine3.19
+    image: drupal-web:${DRUPAL_VERSION}-alpine
     hostname: drupal-web
     build:
       context: nginx

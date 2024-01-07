@@ -31,7 +31,7 @@ services:
       - drupal-mariadb-master
 
   drupal-web:
-    image: "harbor.lan:8443/drupal/10-web:${DRUPAL_VERSION}-alpine3.19"
+    image: "harbor.lan:8443/drupal/10-web:${DRUPAL_VERSION}-alpine"
     hostname: drupal-web
     build:
       context: nginx
