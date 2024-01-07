@@ -2,9 +2,12 @@ version: "3"
 
 services:
   drupal-php:
-    image: "harbor.lan:8443/drupal/10-php:10.1.6-alpine"
+    image: "harbor.lan:8443/drupal/10-php:${DRUPAL_VERSION}-php8.3-fpm-alpine3.19"
     hostname: drupal-php
-    build: php
+    build:
+      context: php
+      args:
+        DRUPAL_VERSION: ${DRUPAL_VERSION}
     environment:
       - MARIADB_DATABASE
       - MARIADB_USER
@@ -28,9 +31,12 @@ services:
       - drupal-mariadb-master
 
   drupal-web:
-    image: "harbor.lan:8443/drupal/10-web:10.1.6-alpine"
+    image: "harbor.lan:8443/drupal/10-web:${DRUPAL_VERSION}-alpine3.19"
     hostname: drupal-web
-    build: nginx
+    build:
+      context: nginx
+      args:
+        DRUPAL_VERSION: ${DRUPAL_VERSION}
     environment:
       NODE_ENV: production
     networks:

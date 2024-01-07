@@ -1,4 +1,5 @@
-FROM drupal:10.1.6-fpm-alpine
+ARG DRUPAL_VERSION
+FROM drupal:${DRUPAL_VERSION}-php8.3-fpm-alpine3.19
 
 RUN apk add mariadb-client shadow pwgen
 

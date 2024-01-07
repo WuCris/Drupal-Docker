@@ -1,5 +1,5 @@
-FROM drupal-php:10.1.6-alpine as builder
-
+ARG DRUPAL_VERSION
+FROM drupal-php:${DRUPAL_VERSION}-php8.3-fpm-alpine3.19 as builder
 
 FROM nginx:1.25-alpine
 
