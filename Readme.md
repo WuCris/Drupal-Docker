@@ -59,7 +59,7 @@ Edit the `.env` file as needed and enter randomly generated passcodes for the da
 **We must then build the images and push them to our registry:**
 
 ```
-docker-compose -f docker-stack-deploy.yml build --pull
+docker-compose -f docker-stack-deploy.yml build
 docker-compose -f docker-stack-deploy.yml push
 ```
 
