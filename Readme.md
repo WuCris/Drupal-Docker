@@ -115,7 +115,7 @@ This has been tested and developed on MicroK8s releases of Kubernetes version `1
 Replace the content with random passwords of your own and run the following in terminal on one of your manager nodes to create database password secrets.
 
 ```
- microk8s kubectl create secret generic drupal-mariadb-password \
+ microk8s kubectl create secret generic drupal-mariadb-passwords \
       --from-literal=MARIADB_ROOT_PASSWORD=RxKP0JKRyTq3H6vWpMPLpCB2A \
       --from-literal=MARIADB_PASSWORD=aE43YpngajSgwqPUydaZie2Vy \
       --from-literal=MARIADB_REPLICATION_PASSWORD=525FIVGrlTJLJZdhaEwX24KVJ \
